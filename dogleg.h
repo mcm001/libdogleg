@@ -7,15 +7,19 @@
 
 #include <cholmod.h>
 #include <stdbool.h>
+#include <functional>
 
-typedef void (dogleg_callback_t)(const double*   p,
-                                 double*         x,
-                                 cholmod_sparse* Jt,
-                                 void*           cookie);
-typedef void (dogleg_callback_dense_t)(const double*   p,
-                                       double*         x,
-                                       double*         J,
-                                       void*           cookie);
+// typedef void (dogleg_callback_t)(const double*   p,
+//                                  double*         x,
+//                                  cholmod_sparse* Jt,
+//                                  void*           cookie);
+// typedef void (dogleg_callback_dense_t)(const double*   p,
+//                                        double*         x,
+//                                        double*         J,
+//                                        void*           cookie);
+
+using dogleg_callback_t = std::function<void(const double*, double*, cholmod_sparse*, void*)>;
+using dogleg_callback_dense_t = std::function<void(const double*, double*, double*, void*)>;
 
 // an operating point of the solver
 typedef struct
