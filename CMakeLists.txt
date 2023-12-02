@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.20)
 
 project(dogleg)
 
@@ -11,6 +11,12 @@ add_library(
 )
 
 target_include_directories(dogleg PRIVATE 
-    ../suitesparse-windows-binaries/CHOLMOD/Include
-    ../suitesparse-windows-binaries/SuiteSparse_config/include
+    /usr/include/suitesparse
+    # ../suitesparse-windows-binaries/CHOLMOD/Include
+    # ../suitesparse-windows-binaries/SuiteSparse_config/include
 )
+
+target_link_libraries(dogleg PUBLIC 
+    suitesparseconfig cholmod lapack
+)
+

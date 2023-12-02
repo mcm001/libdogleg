@@ -487,7 +487,6 @@ static void computeCauchyUpdate(dogleg_operatingPoint_t* point,
 // LAPACK prototypes for a packed cholesky factorization and a linear solve
 // using that factorization, respectively
 extern "C" {
-
 int dpptrf_(char* uplo, int* n, double* ap,
             int* info, int uplo_len);
 int dpptrs_(char* uplo, int* n, int* nrhs,
@@ -529,7 +528,7 @@ void dogleg_computeJtJfactorization(dogleg_operatingPoint_t* point, dogleg_solve
       // singular JtJ. Raise lambda and go again
       if( ctx->lambda == 0.0) ctx->lambda = LAMBDA_INITIAL;
       else                    ctx->lambda *= 10.0;
-      ASSERT( isfinite(ctx->lambda) );
+      ASSERT( std::isfinite(ctx->lambda) );
 
       SAY_IF_VERBOSE( "singular JtJ. Have rank/full rank: %zd/%d. Adding %g I from now on",
                       ctx->factorization->minor, ctx->Nstate, ctx->lambda);
