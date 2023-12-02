@@ -16,6 +16,8 @@
 #include <cholmod_function.h>
 #endif
 
+#include "SuiteSparse_config.h"
+
 
 // Any non-vnlog bit mask
 #define DOGLEG_DEBUG_OTHER_THAN_VNLOG (~DOGLEG_DEBUG_VNLOG)
@@ -484,11 +486,14 @@ static void computeCauchyUpdate(dogleg_operatingPoint_t* point,
 
 // LAPACK prototypes for a packed cholesky factorization and a linear solve
 // using that factorization, respectively
+extern "C" {
+
 int dpptrf_(char* uplo, int* n, double* ap,
             int* info, int uplo_len);
 int dpptrs_(char* uplo, int* n, int* nrhs,
             double* ap, double* b, int* ldb, int* info,
             int uplo_len);
+}
 
 
 void dogleg_computeJtJfactorization(dogleg_operatingPoint_t* point, dogleg_solverContext_t* ctx)
@@ -1133,14 +1138,15 @@ static void set_cholmod_options(cholmod_common* cc)
 
 
   // I want all output to go to STDERR, not STDOUT
-#if (CHOLMOD_VERSION <= (CHOLMOD_VER_CODE(2,2)))
-  cc->print_function = cholmod_error_callback;
-#elif (CHOLMOD_VERSION < (CHOLMOD_VER_CODE(4,0)))
-  CHOLMOD_FUNCTION_DEFAULTS ;
-  CHOLMOD_FUNCTION_PRINTF(cc) = cholmod_error_callback;
-#else
-  SuiteSparse_config_printf_func_set(cholmod_error_callback);
-#endif
+// #if (CHOLMOD_VERSION <= (CHOLMOD_VER_CODE(2,2)))
+  // cc->print_function = cholmod_error_callback;
+SuiteSparse_config.printf_func = cholmod_error_callback;
+// #elif (CHOLMOD_VERSION < (CHOLMOD_VER_CODE(4,0)))
+  // CHOLMOD_FUNCTION_DEFAULTS ;
+  // CHOLMOD_FUNCTION_PRINTF(cc) = cholmod_error_callback;
+// #else
+  // SuiteSparse_config_printf_func_set(cholmod_error_callback);
+// #endif
 }
 
 void dogleg_freeContext(dogleg_solverContext_t** ctx)

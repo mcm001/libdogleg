@@ -11,6 +11,6 @@ add_library(
 )
 
 target_include_directories(dogleg PRIVATE 
-    ../suitesparse/CHOLMOD/Include
-    ../suitesparse/SuiteSparse_config
+    ../suitesparse-windows-binaries/CHOLMOD/Include
+    ../suitesparse-windows-binaries/SuiteSparse_config/include
 )
